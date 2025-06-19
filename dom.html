@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="message">
+
+        <p>DOM wala section</p>
+        <p>DOM wala section</p>
+        <p>DOM wala section</p>
+        <p>DOM wala section</p>
+        <p>DOM wala section</p>
+
+    </div>
+
+    <script>
+        let msg = document.getElementById("message");
+        console.log(msg);
+
+    </script> 
+
+    <div>
+        <input type="radio" name="language" value="JS">
+        <input type="radio" name="language" value="DOM" >
+    </div>
+
+    <script>
+        let btn = document.getElementsByName("language");
+        console.log(btn);
+
+    </script> 
+
+
+    <div>
+        <h1>this is first heading</h1>
+        <h1>this is second heading</h1>
+        <h1>this is third heading</h1>
+        <h1>this is fourth heading</h1>
+    </div>
+
+    <script>
+        let heading = document.getElementsByTagName("h1");
+        console.log(heading);
+    </script> 
+
+
+ <div>
+    <h1 class="message">this is first heading</h1>
+    <h1 class="message">this is second heading</h1>
+    <h1 class="message">this is third heading</h1>
+    <h1 class="message">this is fourth heading</h1>
+</div>
+<script>
+    let msg =  document.getElementsByClassName("message");
+    console.log(msg);
+</script>
+
+<div>
+    <h1 class="message">this is first heading</h1>
+
+        <div class="container">
+        <h1 class="message">this is second heading</h1>
+        <h1 class="message">this is third heading</h1>
+        <h1 class="message">this is fourth heading</h1>
+    </div>
+</div>
+<script>
+    let cnt  = document.getElementById("container");
+    let msg = document.getElementsByClassName("message");
+    console.log(msg);
+</script>
+
+
+
+
+    
+
+</body>
+</html>
