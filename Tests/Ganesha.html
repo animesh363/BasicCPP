@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Ganesh Chaturthi</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #fff6d5, #fff);
+      text-align: center;
+      color: #b71c1c;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 20px;
+    }
+    header img {
+      max-width: 200px;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 10px yellow); }
+      to { filter: drop-shadow(0 0 20px red); }
+    }
+    .greeting {
+      font-size: 2em;
+      font-weight: bold;
+      margin: 20px 0;
+      animation: textglow 2s infinite alternate;
+    }
+    @keyframes textglow {
+      from { color: #d32f2f; text-shadow: 0 0 10px yellow; }
+      to { color: #fbc02d; text-shadow: 0 0 20px red; }
+    }
+    /* Circular Gallery */
+    .gallery-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      margin: 50px auto;
+      perspective: 1000px;
+    }
+    .gallery {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotateGallery 20s infinite linear;
+    }
+    .gallery img {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #fbc02d;
+      box-shadow: 0 0 10px red;
+    }
+    @keyframes rotateGallery {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+    /* Celebration */
+    .celebration {
+      margin: 30px 0;
+    }
+    .celebration button {
+      padding: 12px 20px;
+      background: #fbc02d;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .elephant {
+      position: fixed;
+      width: 120px;
+      top: 50%;
+      transition: 5s;
+      z-index: 1000;
+    }
+    .flowers {
+      position: fixed;
+      top: -50px;
+      font-size: 24px;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      from { transform: translateY(-50px); }
+      to { transform: translateY(100vh); }
+    }
+    .samiti {
+      display: none;
+      font-size: 2em;
+      font-weight: bold;
+      color: #d32f2f;
+      margin: 20px 0;
+      text-shadow: 0 0 10px yellow;
+    }
+    /* Invitation Generator */
+    .invitation {
+      margin: 40px 20px;
+      padding: 20px;
+      border: 2px dashed red;
+      border-radius: 15px;
+      background: #fff8e1;
+    }
+    .invitation input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d32f2f;
+    }
+    #preview-card {
+      margin-top: 20px;
+      padding: 20px;
+      border: 2px solid #fbc02d;
+      border-radius: 15px;
+      background: white;
+      display: none;
+    }
+    #preview-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    @media(max-width:600px){
+      .greeting { font-size: 1.5em; }
+      .gallery img { width: 100px; height: 100px; }
+      .elephant { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Ganesh_chaturthi.png" alt="Lord Ganesha">
+    <div class="greeting">✨ Happy Ganesh Chaturthi ✨</div>
+  </header>
+
+  <!-- Gallery -->
+  <div class="gallery-container">
+    <div class="gallery" id="gallery">
+      <img src="https://i.ibb.co/BBtC5sY/modak.jpg">
+      <img src="https://i.ibb.co/mRcs4WY/ganesha1.jpg">
+      <img src="https://i.ibb.co/XxqjGCV/ganesha2.jpg">
+      <img src="https://i.ibb.co/92Wk1ry/ganesha3.jpg">
+      <img src="https://i.ibb.co/YtQLqLP/ganesha4.jpg">
+    </div>
+  </div>
+
+  <!-- Celebration -->
+  <div class="celebration">
+    <button onclick="startCelebration()">🎉 Celebrate Now 🎉</button>
+    <div class="samiti" id="samiti">✨ Shree Ganesh Pooja Samiti ✨</div>
+  </div>
+
+  <!-- Invitation Card Generator -->
+  <div class="invitation">
+    <h2>Create Your Invitation Card</h2>
+    <input type="text" id="name" placeholder="Enter Committee/Candidate Name">
+    <input type="date" id="date">
+    <input type="file" id="photo" accept="image/*">
+    <button onclick="generateCard()">Generate Card</button>
+    <button onclick="printCard()">Print Card</button>
+    <div id="preview-card">
+      <h3 id="card-name"></h3>
+      <p id="card-date"></p>
+      <img id="card-photo" src="">
+      <p>invites you to celebrate <b>Ganesh Chaturthi</b> with joy and devotion 🙏</p>
+    </div>
+  </div>
+
+  <script>
+    // Gallery 3D Placement
+    const gallery = document.getElementById('gallery');
+    const imgs = gallery.getElementsByTagName('img');
+    const angle = 360 / imgs.length;
+    for(let i=0;i<imgs.length;i++){
+      imgs[i].style.transform = `rotateY(${i*angle}deg) translateZ(300px)`;
+    }
+
+    // Celebration
+    function startCelebration(){
+      const leftElephant = document.createElement('img');
+      leftElephant.src="https://i.ibb.co/f8cLrv5/elephant.png";
+      leftElephant.className="elephant";
+      leftElephant.style.left="-150px";
+      document.body.appendChild(leftElephant);
+      setTimeout(()=>{leftElephant.style.left="30%";},100);
+
+      const rightElephant = document.createElement('img');
+      rightElephant.src="https://i.ibb.co/f8cLrv5/elephant.png";
+      rightElephant.className="elephant";
+      rightElephant.style.right="-150px";
+      document.body.appendChild(rightElephant);
+      setTimeout(()=>{rightElephant.style.right="30%";},100);
+
+      for(let i=0;i<20;i++){
+        const flower=document.createElement('div');
+        flower.className="flowers";
+        flower.innerHTML="🌸";
+        flower.style.left=Math.random()*100+"vw";
+        flower.style.animationDuration=(Math.random()*3+2)+"s";
+        document.body.appendChild(flower);
+        setTimeout(()=>flower.remove(),5000);
+      }
+
+      document.getElementById('samiti').style.display="block";
+    }
+
+    // Invitation Generator
+    function generateCard(){
+      const name=document.getElementById('name').value;
+      const date=document.getElementById('date').value;
+      const photo=document.getElementById('photo').files[0];
+      if(!name || !date || !photo){
+        alert("Please fill all details!");
+        return;
+      }
+      document.getElementById('card-name').innerText=name;
+      document.getElementById('card-date').innerText="Date: "+date;
+      const reader=new FileReader();
+      reader.onload=function(e){
+        document.getElementById('card-photo').src=e.target.result;
+      }
+      reader.readAsDataURL(photo);
+      document.getElementById('preview-card').style.display="block";
+    }
+    function printCard(){
+      const card=document.getElementById('preview-card').innerHTML;
+      const w=window.open();
+      w.document.write("<html><head><title>Invitation Card</title></head><body>"+card+"</body></html>");
+      w.print();
+    }
+  </script>
+</body>
+</html>

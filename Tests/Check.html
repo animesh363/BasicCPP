@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pomodoro Timer</title>
+  <style>
+    :root{
+      --bg:#0f1220;--card:#171a2b;--muted:#8a8fa6;--text:#e8ebff;--accent:#6c7cff;--accent-2:#ff6b6b;--good:#38d39f;--warn:#ffd166;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+      background: radial-gradient(1200px 800px at 80% -10%, #223 0%, transparent 60%),
+                  radial-gradient(800px 600px at -10% 110%, #1a1e36 0%, transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      display:grid; place-items:center; padding:24px;
+    }
+    .app{width:min(900px,95vw);}
+    .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .title{font-weight:800;letter-spacing:.5px;font-size:clamp(18px,2.2vw,22px)}
+    .title small{display:block;color:var(--muted);font-weight:500;font-size:.75em}
+    .mode-tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{border:1px solid #2a2f4a;background:#131629;color:#cbd0ff;padding:10px 14px;border-radius:999px;cursor:pointer;transition:all .2s}
+    .tab[aria-selected="true"]{background:var(--accent);color:#0b0e1a;border-color:transparent;box-shadow:0 8px 24px rgba(108,124,255,.35)}
+    .card{background:linear-gradient(180deg,#171a2b,#14172a);border:1px solid #1f2440;border-radius:24px; padding:24px; box-shadow:0 10px 40px rgba(0,0,0,.35)}
+
+    .timer-wrap{display:grid;grid-template-columns:1fr 1fr; gap:24px;align-items:center}
+    @media (max-width:720px){.timer-wrap{grid-template-columns:1fr;}}
+
+    .ring{position:relative;display:grid;place-items:center}
+    .ring svg{width:min(360px,70vw);height:auto;display:block}
+    .time{position:absolute;text-align:center}
+    .time .mmss{font-size:clamp(40px,9vw,80px);font-weight:800;letter-spacing:1px}
+    .time .label{font-size:clamp(12px,2.3vw,14px);color:var(--muted)}
+
+    .controls{display:flex;flex-wrap:wrap;gap:10px}
+    button{border:none;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;transition:transform .05s ease,filter .2s,background .2s}
+    button:active{transform:translateY(1px)}
+    .primary{background:var(--accent);color:#0b0e1a}
+    .danger{background:var(--accent-2);color:white}
+    .ghost{background:#0f1326;color:#cbd0ff;border:1px solid #262b4b}
+    .good{background:var(--good);color:#00140e}
+
+    .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    .stat{background:#0f1326;border:1px solid #262b4b;padding:12px;border-radius:14px}
+    .stat .k{color:var(--muted);font-size:12px}
+    .stat .v{font-size:16px;font-weight:700}
+
+    .settings{margin-top:18px;display:grid;gap:10px}
+    .row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .row label{color:#cbd0ff}
+    .row input[type="number"], .row input[type="range"], .row input[type="checkbox"]{accent-color:var(--accent)}
+    .row input[type="number"]{width:90px;background:#0f1326;border:1px solid #262b4b;border-radius:10px;color:var(--text);padding:8px}
+
+    .kbd{font-family: ui-monospace,SFMono-Regular,Menlo,monospace;background:#0f1326;border:1px solid #262b4b;border-bottom-width:3px;padding:2px 6px;border-radius:8px;color:#cbd0ff}
+    .footer{margin-top:10px;color:var(--muted);font-size:12px}
+    .link{color:#9aa6ff}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="title">Pomodoro Timer <small>Focus in sprints; rest on purpose.</small></div>
+      <div class="mode-tabs" role="tablist" aria-label="Modes">
+        <button class="tab" role="tab" data-mode="work" aria-selected="true">Pomodoro</button>
+        <button class="tab" role="tab" data-mode="short">Short Break</button>
+        <button class="tab" role="tab" data-mode="long">Long Break</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="timer-wrap">
+        <div class="ring">
+          <!-- Progress ring -->
+          <svg viewBox="0 0 120 120">
+            <defs>
+              <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#6c7cff"/>
+                <stop offset="100%" stop-color="#38d39f"/>
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="54" stroke="#232744" stroke-width="8" fill="none"/>
+            <circle id="progress" cx="60" cy="60" r="54" stroke="url(#grad)" stroke-width="8" fill="none" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="339.292" stroke-dashoffset="339.292"/>
+          </svg>
+          <div class="time">
+            <div class="mmss" id="time">25:00</div>
+            <div class="label" id="modeLabel">Pomodoro</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="controls">
+            <button id="startPause" class="primary">Start ▶</button>
+            <button id="reset" class="ghost">Reset ↺</button>
+            <button id="skip" class="ghost">Next ➜</button>
+            <button id="toggleAuto" class="good" title="Auto-start next session">Auto: Off</button>
+          </div>
+
+          <div class="meta">
+            <div class="stat"><div class="k">Today Focus</div><div class="v" id="focused">00:00</div></div>
+            <div class="stat"><div class="k">Round</div><div class="v" id="round">1 / 4</div></div>
+            <div class="stat"><div class="k">Completed</div><div class="v" id="done">0</div></div>
+          </div>
+
+          <div class="settings">
+            <div class="row"><label>Pomodoro (min)</label><input id="workM" type="number" min="1" max="120" value="25"></div>
+            <div class="row"><label>Short Break (min)</label><input id="shortM" type="number" min="1" max="60" value="5"></div>
+            <div class="row"><label>Long Break (min)</label><input id="longM" type="number" min="1" max="60" value="15"></div>
+            <div class="row"><label>Long Break Every</label><input id="lbEvery" type="number" min="2" max="12" value="4"> </div>
+            <div class="row"><label>Alarm Volume</label><input id="volume" type="range" min="0" max="1" step="0.01" value="0.4"></div>
+            <div class="row"><label><input id="notif" type="checkbox"> Enable desktop notifications</label><span></span></div>
+          </div>
+          <div class="footer">
+            Shortcuts: <span class="kbd">Space</span> start/pause, <span class="kbd">R</span> reset, <span class="kbd">N</span> next, <span class="kbd">1/2/3</span> switch mode.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">Built by you ✨ Keep this tab open to keep the timer running in the background.</p>
+  </div>
+
+  <audio id="beep" preload="auto">
+    <!-- A very short base64 beep tone (440Hz ~150ms) -->
+    <source src="data:audio/wav;base64,UklGRoQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAZGF0YYQAAACAgICAh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eA==" type="audio/wav">
+  </audio>
+
+  <script>
+    // ======= State =======
+    const el = (id) => document.getElementById(id);
+    const tabs = [...document.querySelectorAll('.tab')];
+    const progress = document.getElementById('progress');
+    const timeEl = el('time');
+    const labelEl = el('modeLabel');
+    const startPauseBtn = el('startPause');
+    const resetBtn = el('reset');
+    const skipBtn = el('skip');
+    const autoBtn = el('toggleAuto');
+    const beep = el('beep');
+
+    const inputs = {
+      workM: el('workM'), shortM: el('shortM'), longM: el('longM'), lbEvery: el('lbEvery'), volume: el('volume'),
+    };
+
+    const stats = {focused: el('focused'), round: el('round'), done: el('done')};
+
+    const MODES = { work: 'Pomodoro', short: 'Short Break', long: 'Long Break' };
+
+    const store = {
+      load(){
+        try{ return JSON.parse(localStorage.getItem('pomo-settings')) || {}; }catch{ return {}; }
+      },
+      save(obj){ localStorage.setItem('pomo-settings', JSON.stringify(obj)); }
+    };
+
+    const saved = store.load();
+    inputs.workM.value = saved.workM ?? 25;
+    inputs.shortM.value = saved.shortM ?? 5;
+    inputs.longM.value = saved.longM ?? 15;
+    inputs.lbEvery.value = saved.lbEvery ?? 4;
+    inputs.volume.value = saved.volume ?? 0.4;
+    beep.volume = Number(inputs.volume.value);
+
+    let state = {
+      mode: 'work',
+      secondsLeft: Number(inputs.workM.value) * 60,
+      running: false,
+      interval: null,
+      round: 1,
+      completed: 0,
+      autoNext: false,
+      focusedToday: 0, // seconds
+      lastTick: null,
+    };
+
+    // Restore daily focus if same day
+    const todayKey = 'pomo-focus-' + new Date().toISOString().slice(0,10);
+    state.focusedToday = Number(localStorage.getItem(todayKey) || 0);
+
+    function setMode(mode){
+      state.mode = mode;
+      const m = getMinutesFor(mode);
+      state.secondsLeft = m * 60;
+      labelEl.textContent = MODES[mode];
+      tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.mode === mode)));
+      render();
+    }
+
+    function getMinutesFor(mode){
+      if(mode==='work') return Number(inputs.workM.value);
+      if(mode==='short') return Number(inputs.shortM.value);
+      return Number(inputs.longM.value);
+    }
+
+    function formatMMSS(sec){
+      const m = Math.floor(sec/60).toString().padStart(2,'0');
+      const s = Math.floor(sec%60).toString().padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    function setDash(){
+      const total = getMinutesFor(state.mode) * 60;
+      const circumference = 2 * Math.PI * 54; // r=54
+      const progressRatio = 1 - (state.secondsLeft/total);
+      const offset = circumference * (1 - progressRatio);
+      progress.setAttribute('stroke-dasharray', circumference.toFixed(3));
+      progress.setAttribute('stroke-dashoffset', offset.toFixed(3));
+    }
+
+    function tick(){
+      const now = Date.now();
+      if(!state.lastTick) state.lastTick = now;
+      const dt = Math.floor((now - state.lastTick)/1000);
+      if(dt>=1){
+        state.secondsLeft = Math.max(0, state.secondsLeft - dt);
+        if(state.mode==='work'){
+          state.focusedToday += dt;
+          localStorage.setItem(todayKey, String(state.focusedToday));
+        }
+        state.lastTick = now;
+        render();
+        if(state.secondsLeft===0){
+          finishSession();
+        }
+      }
+    }
+
+    function start(){
+      if(state.running) return;
+      state.running = true;
+      state.lastTick = null;
+      state.interval = setInterval(tick, 250);
+      startPauseBtn.textContent = 'Pause ⏸';
+    }
+    function pause(){
+      state.running = false;
+      clearInterval(state.interval); state.interval = null;
+      startPauseBtn.textContent = 'Start ▶';
+    }
+    function reset(){
+      pause();
+      state.secondsLeft = getMinutesFor(state.mode) * 60;
+      render();
+    }
+
+    function finishSession(){
+      pause();
+      try{ beep.currentTime=0; beep.play(); }catch{}
+      notify(`${MODES[state.mode]} finished`, 'Great job!');
+      if(state.mode==='work'){
+        state.completed += 1;
+        const every = Number(inputs.lbEvery.value);
+        state.round = ((state.completed % every) + 1);
+        stats.done.textContent = String(state.completed);
+      }
+      // Move to next mode
+      if(state.mode==='work'){
+        const every = Number(inputs.lbEvery.value);
+        const next = (state.completed % every === 0) ? 'long' : 'short';
+        setMode(next);
+      } else {
+        setMode('work');
+      }
+      if(state.autoNext){ start(); }
+    }
+
+    function render(){
+      timeEl.textContent = formatMMSS(state.secondsLeft);
+      document.title = `${timeEl.textContent} • ${MODES[state.mode]} — Pomodoro`;
+      setDash();
+      stats.round.textContent = `${state.round} / ${inputs.lbEvery.value}`;
+      const f = formatMMSS(state.focusedToday);
+      stats.focused.textContent = f;
+      autoBtn.textContent = 'Auto: ' + (state.autoNext ? 'On' : 'Off');
+    }
+
+    function notify(title, body){
+      if(!('Notification' in window)) return;
+      if(Notification.permission==='granted'){
+        new Notification(title, {body});
+      }
+    }
+
+    // ======= Events =======
+    tabs.forEach(t => t.addEventListener('click', () => { setMode(t.dataset.mode); }));
+
+    startPauseBtn.addEventListener('click', () => state.running ? pause() : start());
+    resetBtn.addEventListener('click', reset);
+    skipBtn.addEventListener('click', finishSession);
+    autoBtn.addEventListener('click', ()=>{ state.autoNext=!state.autoNext; render(); });
+
+    for(const key in inputs){
+      inputs[key].addEventListener('change', ()=>{
+        if(key==='volume'){ beep.volume = Number(inputs.volume.value); }
+        // persist settings
+        store.save({
+          workM:Number(inputs.workM.value), shortM:Number(inputs.shortM.value), longM:Number(inputs.longM.value), lbEvery:Number(inputs.lbEvery.value), volume:Number(inputs.volume.value)
+        });
+        if(!state.running) reset();
+      });
+    }
+
+    // Notifications toggle
+    document.getElementById('notif').addEventListener('change', async (e)=>{
+      if(e.target.checked && 'Notification' in window){
+        const perm = await Notification.requestPermission();
+        if(perm!=='granted') e.target.checked = false;
+      }
+    });
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if(e.code==='Space'){ e.preventDefault(); state.running ? pause() : start(); }
+      if(e.key==='r' || e.key==='R'){ reset(); }
+      if(e.key==='n' || e.key==='N'){ finishSession(); }
+      if(e.key==='1'){ setMode('work'); }
+      if(e.key==='2'){ setMode('short'); }
+      if(e.key==='3'){ setMode('long'); }
+    });
+
+    // Start
+    render();
+  </script>
+</body>
+</html>

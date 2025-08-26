@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Ganesh Chaturthi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --yellow: #FFD700;
+            --red: #E53935;
+            --white: #FFFFFF;
+            --gold: #FFC107;
+            --light-yellow: #FFF9C4;
+            --dark-red: #B71C1C;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--red) 100%);
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header and Ganesha Section */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .committee-name {
+            font-size: 3.5rem;
+            color: var(--white);
+            text-shadow: 3px 3px 0 var(--red);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .ganesha-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+
+        .ganesha {
+            max-width: 280px;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Greeting Section */
+        .greeting {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .greeting h1 {
+            font-size: 3.5rem;
+            color: var(--white);
+            text-shadow: 3px 3px 0 var(--red);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .greeting p {
+            font-size: 1.2rem;
+            color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .gallery-title {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 var(--red);
+        }
+
+        .gallery-3d-container {
+            perspective: 1200px;
+            height: 350px;
+            margin: 0 auto 50px;
+            position: relative;
+            width: 100%;
+        }
+
+        .gallery-carousel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .gallery-item {
+            position: absolute;
+            width: 250px;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 5px solid var(--white);
+            box-shadow: 0 0 25px var(--gold);
+            cursor: pointer;
+            backface-visibility: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item.active {
+            transform: translateZ(100px);
+            opacity: 1;
+            z-index: 10;
+            box-shadow: 0 0 30px var(--gold);
+            border: 5px solid var(--gold);
+        }
+
+        .gallery-item.active img {
+            transform: scale(1.1);
+        }
+
+        .gallery-controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .gallery-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-btn:hover {
+            background: var(--yellow);
+            color: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Image Slider */
+        .image-slider {
+            margin: 50px auto;
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slider-item {
+            min-width: 100%;
+            height: 400px;
+        }
+
+        .slider-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--white);
+            transform: scale(1.2);
+        }
+
+        /* Celebration Button */
+        .celebration-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--red) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .celebration-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Celebration Animation */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .celebration-content {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            position: relative;
+        }
+
+        .celebration-title {
+            font-size: 3rem;
+            color: var(--yellow);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--red);
+        }
+
+        .elephant {
+            font-size: 4rem;
+            position: absolute;
+            animation: fly 10s linear infinite;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            animation: fall 8s linear infinite;
+            opacity: 0;
+        }
+
+        .close-celebration {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--red);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Invitation Card Section */
+        .invitation-section {
+            margin: 50px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 var(--red);
+        }
+
+        .card-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .generate-btn {
+            grid-column: 1 / -1;
+            padding: 15px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            background: var(--yellow);
+            color: #333;
+            transform: translateY(-3px);
+        }
+
+        /* Invitation Card */
+        .invitation-card {
+            display: none;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--red) 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            position: relative;
+            border: 10px solid var(--gold);
+        }
+
+        .card-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 var(--dark-red);
+        }
+
+        .card-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 5px solid var(--white);
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .card-details {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .print-btn {
+            padding: 12px 30px;
+            background: var(--white);
+            color: var(--red);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .print-btn:hover {
+            background: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--yellow);
+            opacity: 0.7;
+            animation: particleAnimation 10s infinite linear;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--yellow), 0 0 20px var(--yellow);
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--red), 0 0 40px var(--red);
+            }
+        }
+
+        @keyframes particleAnimation {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fly {
+            0% {
+                left: -100px;
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-5deg);
+            }
+            100% {
+                left: 100vw;
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .committee-name, .greeting h1 {
+                font-size: 2.5rem;
+            }
+            
+            .gallery-title, .section-title {
+                font-size: 2rem;
+            }
+            
+            .gallery-item {
+                width: 180px;
+                height: 220px;
+            }
+            
+            .card-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .committee-name, .greeting h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery-title, .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .gallery-item {
+                width: 150px;
+                height: 180px;
+            }
+            
+            .gallery-3d-container {
+                height: 300px;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="committee-name">Hasopur Samiti</h1>
+            <div class="ganesha-container">
+                <!-- Ganesha illustration using SVG -->
+                <svg class="ganesha" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ganesha Body -->
+                    <ellipse cx="250" cy="320" rx="120" ry="150" fill="#FFD700" />
+                    
+                    <!-- Ganesha Head -->
+                    <circle cx="250" cy="180" r="100" fill="#FFD700" />
+                    
+                    <!-- Ganesha Ear -->
+                    <path d="M150 150 Q130 100 150 50 Q180 30 200 80" fill="#FFD700" />
+                    <path d="M350 150 Q370 100 350 50 Q320 30 300 80" fill="#FFD700" />
+                    
+                    <!-- Ganesha Trunk -->
+                    <path d="M250 150 Q230 200 250 250 Q270 200 250 150" fill="#E53935" />
+                    
+                    <!-- Ganesha Eyes -->
+                    <circle cx="220" cy="160" r="15" fill="black" />
+                    <circle cx="280" cy="160" r="15" fill="black" />
+                    
+                    <!-- Ganesha Crown -->
+                    <path d="M200 100 L250 50 L300 100 Z" fill="#E53935" />
+                    
+                    <!-- Ganesha Modak -->
+                    <circle cx="250" cy="230" r="15" fill="#8B4513" />
+                    
+                    <!-- Ganesha Arms -->
+                    <path d="M130 300 Q100 280 110 240 Q120 220 140 240 Q150 270 130 300" fill="#FFD700" />
+                    <path d="M370 300 Q400 280 390 240 Q380 220 360 240 Q350 270 370 300" fill="#FFD700" />
+                </svg>
+            </div>
+        </div>
+        
+        <div class="greeting">
+            <h1>Happy Ganesh Chaturthi</h1>
+            <p>May Lord Ganesha bless you with wisdom, prosperity, and success. May all your obstacles be removed and may you find joy and happiness in everything you do.</p>
+        </div>
+        
+        <div class="gallery-section">
+            <h2 class="gallery-title">Festive Gallery</h2>
+            <div class="gallery-3d-container">
+                <div class="gallery-carousel" id="gallery-carousel">
+                    <div class="gallery-item active" data-index="0">
+                        <img src="https://images.unsplash.com/photo-1661525245032-2af100aea0a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhbmVzaCUyMHB1amF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item" data-index="1">
+                        <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item" data-index="2">
+                        <img src="https://images.unsplash.com/photo-1661525245032-2af100aea0a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhbmVzaCUyMHB1amF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item" data-index="3">
+                        <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Ganesh Chaturthi">
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-controls">
+                <button class="gallery-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="gallery-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <!-- Image Slider -->
+        <div class="image-slider">
+            <div class="slider-container" id="slider-container">
+                <div class="slider-item">
+                    <img src="https://images.unsplash.com/photo-1661525245032-2af100aea0a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhbmVzaCUyMHB1amF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1000&q=60" alt="Ganesh Chaturthi">
+                </div>
+                <div class="slider-item">
+                    <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww&auto=format&fit=crop&w=1000&q=60" alt="Ganesh Chaturthi">
+                </div>
+                <div class="slider-item">
+                    <img src="https://images.unsplash.com/photo-1661525245032-2af100aea0a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhbmVzaCUyMHB1amF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1000&q=60" alt="Ganesh Chaturthi">
+                </div>
+            </div>
+            <div class="slider-controls">
+                <div class="slider-dot active" data-index="0"></div>
+                <div class="slider-dot" data-index="1"></div>
+                <div class="slider-dot" data-index="2"></div>
+            </div>
+        </div>
+        
+        <button class="celebration-btn" id="celebration-trigger">Start Celebration</button>
+        
+        <div class="celebration" id="celebration">
+            <div class="celebration-content">
+                <h2 class="celebration-title">Happy Ganesh Chaturthi</h2>
+                <p>Welcome to the celebration by <span id="samiti-name">Hasopur Samiti</span></p>
+                <p>May Lord Ganesha bless you all!</p>
+                <button class="close-celebration" id="close-celebration"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        
+        <div class="invitation-section">
+            <h2 class="section-title">Create Your Invitation</h2>
+            <div class="card-form">
+                <div class="form-group">
+                    <label for="committee-name">Committee Name</label>
+                    <input type="text" id="committee-name" placeholder="Enter committee name" value="Hasopur Samiti">
+                </div>
+                <div class="form-group">
+                    <label for="president-name">President Name</label>
+                    <input type="text" id="president-name" placeholder="Enter president name">
+                </div>
+                <div class="form-group">
+                    <label for="secretary-name">Secretary Name</label>
+                    <input type="text" id="secretary-name" placeholder="Enter secretary name">
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Event Date</label>
+                    <input type="date" id="event-date">
+                </div>
+                <div class="form-group full-width">
+                    <label for="event-address">Event Address</label>
+                    <textarea id="event-address" placeholder="Enter event address"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label for="image-upload">Upload Committee Logo (Optional)</label>
+                    <input type="file" id="image-upload" accept="image/*">
+                </div>
+                <button class="generate-btn" id="generate-card">Generate Invitation Card</button>
+            </div>
+            
+            <div class="invitation-card" id="invitation-card">
+                <h2 class="card-title">Happy Ganesh Chaturthi</h2>
+                <div class="card-image">
+                    <img id="card-logo" src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FuZXNoJTIwY2hhdHVydGhpfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Ganesh Chaturthi">
+                </div>
+                <div class="card-content">
+                    <p>You are cordially invited to celebrate Ganesh Chaturthi with us</p>
+                </div>
+                <div class="card-details">
+                    <p><strong>Committee:</strong> <span id="card-committee">Hasopur Samiti</span></p>
+                    <p><strong>President:</strong> <span id="card-president">John Doe</span></p>
+                    <p><strong>Secretary:</strong> <span id="card-secretary">Jane Smith</span></p>
+                    <p><strong>Date:</strong> <span id="card-date">September 15, 2023</span></p>
+                    <p><strong>Address:</strong> <span id="card-address">123 Main Street, City, State</span></p>
+                </div>
+                <button class="print-btn" id="print-card">Invitate</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Wishing you and your family a very Happy Ganesh Chaturthi!</p>
+            <p>May the divine blessings of Lord Ganesha bring you happiness and prosperity.</p>
+        </div>
+    </div>
+
+    <script>
+        // Create festive particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const colors = ['#FFD700', '#E53935', '#FFFFFF', '#FFC107'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 10 + 2;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Set styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = color;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // 3D Circular Gallery
+        function initGallery() {
+            const carousel = document.getElementById('gallery-carousel');
+            const items = document.querySelectorAll('.gallery-item');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentIndex = 0;
+            const totalItems = items.length;
+            const angle = 360 / totalItems;
+            
+            function updateGallery() {
+                // Position items in a 3D circle
+                items.forEach((item, index) => {
+                    const itemAngle = angle * index;
+                    const z = 300 * Math.cos((itemAngle * Math.PI) / 180);
+                    const x = 300 * Math.sin((itemAngle * Math.PI) / 180);
+                    const opacity = index === currentIndex ? 1 : 0.6;
+                    
+                    item.style.transform = `rotateY(${itemAngle}deg) translateZ(300px)`;
+                    item.style.opacity = opacity;
+                    
+                    if (index === currentIndex) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Rotate carousel to show current item
+                carousel.style.transform = `rotateY(${-currentIndex * angle}deg)`;
+            }
+            
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+                updateGallery();
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateGallery();
+            });
+            
+            // Initialize gallery
+            updateGallery();
+            
+            // Auto rotate
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateGallery();
+            }, 3000);
+        }
+        
+        // Image Slider
+        function initImageSlider() {
+            const slider = document.getElementById('slider-container');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+            const slideCount = slider.children.length;
+            
+            function updateSlider() {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlider();
+                });
+            });
+            
+            // Auto slide
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slideCount;
+                updateSlider();
+            }, 5000);
+        }
+        
+        // Celebration Animation
+        function initCelebration() {
+            const celebration = document.getElementById('celebration');
+            const trigger = document.getElementById('celebration-trigger');
+            const closeBtn = document.getElementById('close-celebration');
+            
+            trigger.addEventListener('click', () => {
+                celebration.style.display = 'flex';
+                createCelebrationElements();
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                celebration.style.display = 'none';
+                // Remove all celebration elements
+                const elephants = document.querySelectorAll('.elephant');
+                const flowers = document.querySelectorAll('.flower');
+                
+                elephants.forEach(elephant => elephant.remove());
+                flowers.forEach(flower => flower.remove());
+            });
+        }
+        
+        function createCelebrationElements() {
+            const celebration = document.getElementById('celebration');
+            
+            // Create flying elephants
+            for (let i = 0; i < 2; i++) {
+                const elephant = document.createElement('div');
+                elephant.classList.add('elephant');
+                elephant.innerHTML = '🐘';
+                elephant.style.top = `${30 + i * 30}%`;
+                elephant.style.animationDelay = `${i * 2}s`;
+                celebration.appendChild(elephant);
+            }
+            
+            // Create falling flowers
+            for (let i = 0; i < 20; i++) {
+                const flower = document.createElement('div');
+                flower.classList.add('flower');
+                flower.innerHTML = '🌸';
+                flower.style.left = `${Math.random() * 100}%`;
+                flower.style.animationDelay = `${Math.random() * 5}s`;
+                flower.style.fontSize = `${Math.random() * 2 + 1}rem`;
+                celebration.appendChild(flower);
+            }
+        }
+        
+        // Invitation Card Generator
+        function initInvitationCard() {
+            const generateBtn = document.getElementById('generate-card');
+            const printBtn = document.getElementById('print-card');
+            const imageUpload = document.getElementById('image-upload');
+            let uploadedImage = null;
+            
+            generateBtn.addEventListener('click', () => {
+                const committee = document.getElementById('committee-name').value || 'Hasopur Samiti';
+                const president = document.getElementById('president-name').value || 'President Name';
+                const secretary = document.getElementById('secretary-name').value || 'Secretary Name';
+                const date = document.getElementById('event-date').value || new Date().toISOString().split('T')[0];
+                const address = document.getElementById('event-address').value || 'Event Address';
+                
+                // Format date
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Update card
+                document.getElementById('card-committee').textContent = committee;
+                document.getElementById('card-president').textContent = president;
+                document.getElementById('card-secretary').textContent = secretary;
+                document.getElementById('card-date').textContent = formattedDate;
+                document.getElementById('card-address').textContent = address;
+                
+                // Update celebration samiti name
+                document.getElementById('samiti-name').textContent = committee;
+                
+                // Update image if uploaded
+                if (uploadedImage) {
+                    document.getElementById('card-logo').src = uploadedImage;
+                }
+                
+                // Show card
+                document.getElementById('invitation-card').style.display = 'block';
+            });
+            
+            printBtn.addEventListener('click', () => {
+                const card = document.getElementById('invitation-card');
+                const originalContents = document.body.innerHTML;
+                
+                document.body.innerHTML = card.outerHTML;
+                window.print();
+                document.body.innerHTML = originalContents;
+                location.reload();
+            });
+            
+            imageUpload.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        uploadedImage = e.target.result;
+                    }
+                    
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+        
+        // Initialize
+        window.onload = function() {
+            createParticles();
+            initGallery();
+            initImageSlider();
+            initCelebration();
+            initInvitationCard();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Ganesh Chaturthi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        :root {
+            --yellow: #FFD700;
+            --red: #E53935;
+            --white: #FFFFFF;
+            --gold: #FFC107;
+            --light-yellow: #FFF9C4;
+            --dark-red: #B71C1C;
+        }
+        body {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--red) 100%);
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        /* Styles truncated for brevity, keep your existing styles */
+        
+        /* New CSS for 3D effect */
+        .circular-gallery {
+            perspective: 1000px;
+            margin: 0 auto;
+            height: 400px;
+            width: 400px;
+        }
+        .gallery-item {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 5px solid var(--white);
+            box-shadow: 0 0 20px var(--gold);
+            cursor: pointer;
+        }
+
+        /* 3D gallery rotation */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            animation: rotate 20s infinite linear;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Other existing styles */
+        /* Footer and other sections here */
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="ganesha-container">
+                <!-- Ganesha illustration using SVG -->
+                <svg class="ganesha" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Ganesha Body -->
+                    <ellipse cx="250" cy="320" rx="120" ry="150" fill="#FFD700" />
+                    
+                    <!-- Ganesha Head -->
+                    <circle cx="250" cy="180" r="100" fill="#FFD700" />
+                    
+                    <!-- Ganesha Ear -->
+                    <path d="M150 150 Q130 100 150 50 Q180 30 200 80" fill="#FFD700" />
+                    <path d="M350 150 Q370 100 350 50 Q320 30 300 80" fill="#FFD700" />
+                    
+                    <!-- Ganesha Trunk -->
+                    <path d="M250 150 Q230 200 250 250 Q270 200 250 150" fill="#E53935" />
+                    
+                    <!-- Ganesha Eyes -->
+                    <circle cx="220" cy="160" r="15" fill="black" />
+                    <circle cx="280" cy="160" r="15" fill="black" />
+                    
+                    <!-- Ganesha Crown -->
+                    <path d="M200 100 L250 50 L300 100 Z" fill="#E53935" />
+                    
+                    <!-- Ganesha Modak -->
+                    <circle cx="250" cy="230" r="15" fill="#8B4513" />
+                    
+                    <!-- Ganesha Arms -->
+                    <path d="M130 300 Q100 280 110 240 Q120 220 140 240 Q150 270 130 300" fill="#FFD700" />
+                    <path d="M370 300 Q400 280 390 240 Q380 220 360 240 Q350 270 370 300" fill="#FFD700" />
+                </svg>
+            </div>
+        </div>
+        
+        <div class="greeting">
+            <h1>Happy Ganesh Chaturthi</h1>
+            <p>May Lord Ganesha bless you with wisdom, prosperity, and success. May all your obstacles be removed, and may you find joy and happiness in everything you do.</p>
+        </div>
+
+        <!-- Updated 3D Circular Gallery Section -->
+        <div class="gallery-section">
+            <h2 class="gallery-title">Festive Gallery</h2>
+            <div class="circular-gallery">
+                <div class="gallery-container">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1661525245032-2af100aea0a5?ixlib=rb-4.0.3" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1596474885308-18eb546e11cf?ixlib=rb-4.0.3" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1596450426487-021e4b21aa6b?ixlib=rb-4.0.3" alt="Ganesh Chaturthi">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1600861036640-b39c7305f80e?ixlib=rb-4.0.3" alt="Ganesh Chaturthi">
+                    </div>
+                </div>  
+            </div>
+        </div>
+
+        <button class="celebration-btn" id="celebration-trigger">Start Celebration</button>
+        
+        <div class="celebration" id="celebration">
+            <div class="celebration-content">
+                <h2 class="celebration-title">Happy Ganesh Chaturthi</h2>
+                <p>Welcome to the celebration by <span id="samiti-name">Ganesh Utsav Samiti</span></p>
+                <p>May Lord Ganesha bless you all!</p>
+                <button class="close-celebration" id="close-celebration"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <!-- Rest of the Invitation Card Section and Footer remain unchanged -->
+        
+        <div class="footer">
+            <p>Wishing you and your family a very Happy Ganesh Chaturthi!</p>
+            <p>May the divine blessings of Lord Ganesha bring you happiness and prosperity.</p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for dynamic functionalities
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const colors = ['#FFD700', '#E53935', '#FFFFFF', '#FFC107'];
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 10 + 2;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = color;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+       
+        // Initialize
+        window.onload = function() {
+            createParticles();
+            initGallery();
+            initCelebration();
+            initInvitationCard();
+        };
+    </script>
+</body>
+</html>

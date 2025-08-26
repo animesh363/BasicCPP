@@ -1,1 +1,1 @@
-console.log(myTimeStamp); // 1643723400000
+console.log(newDate.getDate());
